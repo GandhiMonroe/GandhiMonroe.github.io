@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barnee Countdown</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div>
+        <a id="date"></a>
+    </div>
+    <div>
+        <a id="timeTogether"></a>
+    </div>
+    <div>
+        <a id="timeTillYear"></a>
+    </div>
+    <div>
+        <a id="timeTillMonth"></a>
+    </div>
+</body>
+</html>
+
+<script>
+    function updateDates() {
+        var now = new Date(), // current date
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December']; // you get the idea
+
+            // a cleaner way than string concatenation
+            date = [now.getDate(),
+                months[now.getMonth()],
+                now.getFullYear()].join(' ');
+
+        var anniversary = new Date(2017, 11, 1);
+
+        var today = Date.now();
+        var diff_date = today - anniversary;
+
+        var num_years = diff_date/31536000000;
+        var num_months = (diff_date % 31536000000)/2628000000;
+        var num_days = ((diff_date % 31536000000) % 2628000000)/86400000;
+
+        // set the content of the element with the ID time to the formatted string
+        document.getElementById('date').innerHTML = "Todays Date is: " + date;
+
+        var timeTogether = document.getElementById('timeTogether');
+        timeTogether.innerHTML = "That means that Benji and Harnee have been together for ";
+        if(Math.floor(num_years) > 0) {
+            timeTogether.innerHTML += Math.floor(num_years) + " years, ";
+        }
+        timeTogether.innerHTML +=
+              Math.floor(num_months) + " months and "
+            + Math.floor(num_days) + " days.";
+
+        var timeTillYear = document.getElementById('timeTillYear');
+
+        var nextAnniversary = anniversary;
+        if(Math.floor(num_years) > 0){
+            nextAnniversary.setFullYear(anniversary.getFullYear() + num_years + 1);
+        } else {
+            nextAnniversary.setFullYear(anniversary.getFullYear() + 1);
+        }
+
+        console.log(nextAnniversary);
+
+        var diffToNext = nextAnniversary - today;
+
+        var numMonthsToNext = (diffToNext % 31536000000)/2628000000;
+        var numDaysToNext = ((diffToNext % 31536000000) % 2628000000)/86400000;
+
+        console.log(numMonthsToNext);
+        console.log(numDaysToNext);
+
+        timeTillYear.innerHTML = "So it's ";
+        if(Math.floor(numMonthsToNext) > 0) {
+            var text = Math.floor(numMonthsToNext) + " months ";
+            timeTillYear.innerHTML += text;
+        }
+
+        if(Math.floor(numDaysToNext) > 0) {
+            var text = Math.floor(numDaysToNext) + " days ";
+            timeTillYear.innerHTML += text;
+        }
+
+        if(nextAnniversary === today) {
+            var text = "your anniversary!!!!"
+            timeTillYear.innerHTML += text;
+        } else {
+            var text = "until your anniversary!"
+            timeTillYear.innerHTML += text;
+        }
+
+        // call this function again in 1000ms
+        setTimeout(updateDates, 1000);
+    }
+    updateDates(); // initial call
+</script>
